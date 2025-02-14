@@ -6,10 +6,10 @@ import Listing from '@/models/Listing';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  props: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = props.params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
