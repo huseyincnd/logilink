@@ -7,12 +7,11 @@ import User from '@/models/User';
 
 export async function GET(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Params'ı await et
-    const params = await context.params;
-    const { id } = params;
+    const { id } = await params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
