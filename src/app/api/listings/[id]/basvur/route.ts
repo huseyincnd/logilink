@@ -4,12 +4,16 @@ import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
+interface RouteSegment {
+  id: string;
+}
+
 export async function POST(
   request: Request,
-  props: { params: { id: string } }
+  { params }: { params: RouteSegment }
 ) {
   try {
-    const { id } = props.params;
+    const { id } = params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
