@@ -5,11 +5,11 @@ import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
 export async function POST(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = context.params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
