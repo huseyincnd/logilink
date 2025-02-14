@@ -5,7 +5,7 @@ import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
 export async function POST(
-  req: Request,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
