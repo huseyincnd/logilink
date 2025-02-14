@@ -25,7 +25,7 @@ interface UserWithStats {
 
 export async function GET(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Oturum kontrolü
@@ -39,9 +39,7 @@ export async function GET(
 
     await dbConnect();
 
-    // Params'ı await et
-    const params = await context.params;
-    const { id } = params;
+    const { id } = await params;
 
     // Kullanıcı bilgilerini getir
     const userDoc = await User.findById(id).select(
