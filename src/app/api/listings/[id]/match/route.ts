@@ -6,12 +6,20 @@ import Listing from '@/models/Listing';
 
 export async function POST(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Params'ı await et
-    const params = await context.params;
-    const { id } = params;
+    const { id } = await params;
+
+    // Request body'den seçilen taşıyıcı ID'sini al
+    const { carrierId } = await request.json();
+    if (!carrierId) {
+      return NextResponse.json(
+        { error: 'Taşıyıcı ID\'si gerekli' },
+        { status: 400 }
+      );
+    }
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
@@ -32,26 +40,33 @@ export async function POST(
       return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 403 });
     }
 
-    // Request body'den eşleşecek kullanıcı ID'sini al
-    const { userId } = await request.json();
-    if (!userId) {
+    // İlanın aktif olduğundan emin ol
+    if (listing.durum !== 'aktif') {
       return NextResponse.json(
-        { error: 'Eşleşecek kullanıcı seçilmedi' },
+        { error: 'Bu ilan artık aktif değil' },
+        { status: 400 }
+      );
+    }
+
+    // Seçilen taşıyıcının başvuranlar arasında olduğundan emin ol
+    if (!listing.basvuranlar.includes(carrierId)) {
+      return NextResponse.json(
+        { error: 'Seçilen taşıyıcı bu ilana başvurmamış' },
         { status: 400 }
       );
     }
 
     // İlanı güncelle
     listing.durum = 'eşleşti';
-    listing.eslesmisKullanici = userId;
+    listing.eslestigiKullanici = carrierId;
     listing.eslesmeTarihi = new Date();
     await listing.save();
 
     return NextResponse.json({ message: 'İlan başarıyla eşleştirildi' });
   } catch (error: any) {
-    console.error('İlan eşleştirme hatası:', error);
+    console.error('Eşleştirme hatası:', error);
     return NextResponse.json(
-      { error: 'İlan eşleştirilirken bir hata oluştu' },
+      { error: 'Eşleştirme yapılırken bir hata oluştu' },
       { status: 500 }
     );
   }
