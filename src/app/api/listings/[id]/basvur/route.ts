@@ -4,9 +4,16 @@ import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
+type Context = {
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: Context
 ) {
   try {
     const { id } = context.params;
