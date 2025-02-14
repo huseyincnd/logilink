@@ -4,15 +4,9 @@ import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
-type RouteParams = {
-  params: {
-    id: string;
-  };
-};
-
 export async function POST(
-  req: NextRequest,
-  { params }: RouteParams
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     const { id } = params;
