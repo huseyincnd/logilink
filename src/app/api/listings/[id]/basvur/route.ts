@@ -1,22 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
-type Context = {
-  params: {
-    id: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 export async function POST(
-  request: NextRequest,
-  context: Context
+  req: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
