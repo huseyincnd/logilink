@@ -56,7 +56,7 @@ export async function GET(request: Request) {
     const userId = searchParams.get('userId');
     const durum = searchParams.get('durum');
 
-    const query: Record<string, unknown> = {};
+    let query: any = {};
 
     // Kullanıcıya özel ilanlar için filtre
     if (userId) {
