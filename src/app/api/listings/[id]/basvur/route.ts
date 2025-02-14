@@ -4,12 +4,15 @@ import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
-export async function POST(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export async function POST(request: NextRequest, props: Props) {
   try {
-    const { id } = context.params;
+    const { id } = props.params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
