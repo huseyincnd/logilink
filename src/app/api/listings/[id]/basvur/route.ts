@@ -1,19 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import Listing from '@/models/Listing';
 
-interface RouteSegment {
-  id: string;
-}
-
 export async function POST(
-  request: Request,
-  { params }: { params: RouteSegment }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = context.params;
 
     // Oturum kontrolü
     const session = await getServerSession(authOptions);
