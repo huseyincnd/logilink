@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 interface FormData {
   email: string;
@@ -72,14 +73,20 @@ export default function KayitPage() {
         throw new Error(data.error || 'Kayıt olurken bir hata oluştu');
       }
 
-      // Kullanıcı bilgilerini kaydet
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // Global state'i güncelle
-      window.setIsLoggedIn(true);
-      
+      // Başarılı kayıt sonrası otomatik giriş yap
+      const signInResult = await signIn('credentials', {
+        email: formData.email,
+        password: formData.sifre,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        throw new Error(signInResult.error);
+      }
+
       // İlanlar sayfasına yönlendir
       router.push('/ilanlar');
+      router.refresh();
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
