@@ -6,9 +6,11 @@ import Listing from '@/models/Listing';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
+    // Params'ı await et
+    const params = await context.params;
     const { id } = params;
 
     // Oturum kontrolü
