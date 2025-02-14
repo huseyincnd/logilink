@@ -39,7 +39,7 @@ export default function CityInput({ value, onChange, placeholder }: CityInputPro
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     setShowSuggestions(true);
@@ -66,7 +66,7 @@ export default function CityInput({ value, onChange, placeholder }: CityInputPro
       <input
         type="text"
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={handleChange}
         onFocus={() => setShowSuggestions(true)}
         className="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition"
         placeholder={placeholder}
